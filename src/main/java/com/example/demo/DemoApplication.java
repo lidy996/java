@@ -8,9 +8,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.documentation.spring.web.SpringfoxWebMvcConfiguration;
 
 @SpringBootApplication
-public class Demo01Application {
+public class DemoApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(Demo01Application.class, args);
+        SpringApplication.run(DemoApplication.class, args);
     }
 }
