@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 
 @Slf4j
@@ -48,33 +49,50 @@ public class KafkaController {
     @ApiOperation(value = "发送消息")
     public void send() throws InterruptedException {
         Long time_01 = System.currentTimeMillis();
-        int messageCount = 1;
+        int messageCount = 100000;
         CountDownLatch downLatch = new CountDownLatch(messageCount);
         for (int i = 0;i < messageCount;i++){
-            Thread.sleep(100);
             String key = UUID.randomUUID().toString();
             String data = "message_" + i;
             // 线程池发送
 //            newFixedThreadPool.execute(()->{
 //                downLatch.countDown();
-//                kafkaTemplate.send("test_01",key,data);
+//                try {
+//                    SendResult sendResult = kafkaTemplate.send("test_01",key,data).get();
+//                    System.out.println(sendResult.toString());
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                } catch (ExecutionException e) {
+//                    e.printStackTrace();
+//                }
 //            });
-            // 发送回调
+
+            // 单线程发送
+//            kafkaTemplate.send("test_01",key,data);
             try {
-                ListenableFuture<SendResult<String, Object>> future = kafkaTemplate.send("test_01" ,key ,data);
-                future.addCallback(new ListenableFutureCallback<SendResult<String, Object>>() {
-                    @Override
-                    public void onSuccess(SendResult<String, Object> result) {
-                        log.info("msg send success:{}",result.toString());
-                    }
-                    @Override
-                    public void onFailure(Throwable e) {
-                        log.info("msg send failed:{}",e.toString());
-                    }
-                });
-            } catch (Exception e){
-                log.info("msg send exception:{}",e.toString());
+                SendResult sendResult = kafkaTemplate.send("test_01",key,data).get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
             }
+
+            // 发送回调
+//            try {
+//                ListenableFuture<SendResult<String, Object>> future = kafkaTemplate.send("test_01" ,key ,data);
+//                future.addCallback(new ListenableFutureCallback<SendResult<String, Object>>() {
+//                    @Override
+//                    public void onSuccess(SendResult<String, Object> result) {
+//                        log.info("msg send success:{}",result.toString());
+//                    }
+//                    @Override
+//                    public void onFailure(Throwable e) {
+//                        log.info("msg send failed:{}",e.toString());
+//                    }
+//                });
+//            } catch (Exception e){
+//                log.info("msg send exception:{}",e.toString());
+//            }
         }
 //        downLatch.await();
         Long time_02 = System.currentTimeMillis();

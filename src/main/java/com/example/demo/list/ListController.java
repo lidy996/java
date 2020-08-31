@@ -1,5 +1,9 @@
 package com.example.demo.list;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -76,42 +80,76 @@ public class ListController {
     }
 
     public static void main(String[] args) {
-        List<Object> list = new ArrayList<>();
-        list.add(1);
-        list.add(2);
-        list.add(3);
-        list.add(4);
-        list.add(5);
-        list.add(6);
+//        List<Object> list = new ArrayList<>();
+//        list.add(1);
+//        list.add(2);
+//        list.add(3);
+//        list.add(4);
+//        list.add(5);
+//        list.add(6);
 
-        for(int i = 1;i < 4;i++){
-            Iterator<Object> iterator = list.iterator();
-            while (iterator.hasNext()){
-                Object o = iterator.next();
-                if (i == 1 && o.equals(3)){
-                    iterator.remove();
-                }
-                if (i == 2 && o.equals(5)){
-                    iterator.remove();
-                }
-                if (i == 3 && o.equals(1)){
-                    iterator.remove();
-                }
-            }
-            System.out.println(list.toString());
-        }
+        // 迭代删除
+//        for(int i = 1;i < 4;i++){
+//            Iterator<Object> iterator = list.iterator();
+//            while (iterator.hasNext()){
+//                Object o = iterator.next();
+//                if (i == 1 && o.equals(3)){
+//                    iterator.remove();
+//                }
+//                if (i == 2 && o.equals(5)){
+//                    iterator.remove();
+//                }
+//                if (i == 3 && o.equals(1)){
+//                    iterator.remove();
+//                }
+//            }
+//            System.out.println(list.toString());
+//        }
 
 
-//        //普通for循环遍历删除
+        //for循环遍历删除
 //        for (int i = 0; i < list.size(); i++) {
 //            Object o = list.get(i);
 //            if (o.equals(2)) {
 //                list.remove(i);
-//                //★★★★★ 角标减一
-//                i--;
+//                // 下标减1 !!
+////                i--;
 //            }
 //        }
 //        System.out.println(list.toString());
+//
+//        // 初始容量问题
+//        List<Object> objectList = new ArrayList<>(10);
+//        objectList.add(1);
+//        objectList.add(1,4);
+
+        List<User> userList = new ArrayList<>();
+        User aUser = new User();
+        aUser.setId(00001L);
+        aUser.setName("00001L");
+        userList.add(aUser);
+        User bUser = new User();
+        bUser.setId(00001L);
+        bUser.setName("00001L");
+        userList.add(bUser);
+        User cUser = new User();
+        cUser.setId(00001L);
+        cUser.setName("00001L");
+        userList.add(cUser);
+        System.out.println(JSON.toJSONString(userList));
+
+        String a = "[{\"id\":1,\"name\":\"00001L\"},{\"id\":1,\"name\":\"00001L\"},{\"id\":1,\"name\":\"00001L\"}]";
+        JSONArray jsonArray = JSON.parseArray(a);
+        JSONObject jsonObject = JSON.parseObject(a);
+        System.out.println(jsonObject);
+    }
+
+    @Data
+    private static class User {
+
+        private Long id;
+
+        private String name;
     }
 
     public synchronized void add(List<Object> syncArrayList){

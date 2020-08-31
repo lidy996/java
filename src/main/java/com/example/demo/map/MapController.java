@@ -1,5 +1,7 @@
 package com.example.demo.map;
 
+import com.example.demo.set.SetController;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -39,6 +41,8 @@ public class MapController {
 
         Map map = new HashMap();
         Map testMap = Collections.synchronizedMap(map);
+        testMap.put(null,null);
+
 
         Map tableMap = new Hashtable();
         tableMap.put(1,1);
@@ -46,13 +50,48 @@ public class MapController {
         Map safeMap = new ConcurrentHashMap();
         safeMap.put(1,1);
 
-        Set<Object> keySet = capMap.keySet();
-        keySet.forEach(key->{
-            System.out.println(key);
-            capMap.remove(key);
-        });
+//        Set<Object> keySet = capMap.keySet();
+//        keySet.forEach(key->{
+//            System.out.println(key);
+//            capMap.remove(key);
+//        });
 
 
+        LinkedHashMap linkedHashMap = new LinkedHashMap();
+        linkedHashMap.put(1,1);
+
+        /**
+         * 验证TreeMap顺序
+         */
+        /*
+            0
+            1
+            2
+            3
+            4
+            5
+            6
+            7
+            8
+            9
+            32
+            56
+            124
+         */
+        TreeMap treeMap = new TreeMap();
+        treeMap.put(124,124);
+        treeMap.put(32,32);
+        treeMap.put(56,56);
+        treeMap.put(3,3);
+
+        for (int i = 0;i < 10;i++){
+            treeMap.put(i,i);
+        }
+
+        Set stringSet = treeMap.keySet();
+        for (Object key : stringSet){
+            System.out.println(treeMap.get(key));
+        }
     }
 
     @RequestMapping("hashmap/put")
